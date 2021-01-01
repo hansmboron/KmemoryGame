@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import site.hansmboron.mymemory.models.BoardSize
 import site.hansmboron.mymemory.models.MemoryCard
@@ -53,6 +55,10 @@ class MemoryBoardAdapter(
         fun bind(position: Int) {
             val memoryCard = cards[position]
             imageButton.setImageResource(if (memoryCard.isFaceUp) cards[position].identifier else R.drawable.ic_launcher_background)
+
+            imageButton.alpha = if (memoryCard.isMached) .4f else 1.0f
+            val colorStateList = if (memoryCard.isMached) ContextCompat.getColorStateList(context, R.color.color_grey) else null
+            ViewCompat.setBackgroundTintList(imageButton, colorStateList)
 
             imageButton.setOnClickListener {
                 Log.i(TAG, "Clicked on position $position")
