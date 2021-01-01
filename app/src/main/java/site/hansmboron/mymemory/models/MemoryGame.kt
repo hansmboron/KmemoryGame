@@ -48,4 +48,12 @@ class MemoryGame(private val boardSize: BoardSize) {
             }
         }
     }
+
+    fun haveWonGame(): Boolean {
+        return numPairsFound == boardSize.getNumPairs()
+    }
+
+    fun isCardFaceUp(position: Int): Boolean {
+        return cards[position].isFaceUp
+    }
 }
