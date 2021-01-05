@@ -4,9 +4,11 @@ import android.animation.ArgbEvaluator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -61,9 +63,33 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     setupBoard()
                 }
+                return true
+            }
+            R.id.mi_new_size -> {
+                showNewSizeDialog()
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showNewSizeDialog() {
+        val boardSizeView = LayoutInflater.from(this).inflate(R.layout.dialog_board_size, null)
+        val radioGroupSize = boardSizeView.findViewById<RadioGroup>(R.id.radioGroup)
+        when (boardSize) {
+            BoardSize.EASY -> radioGroupSize.check(R.id.rbEasy)
+            BoardSize.MEDIUM -> radioGroupSize.check(R.id.rbMed)
+            BoardSize.HARD -> radioGroupSize.check(R.id.rbHard)
+        }
+        showAlertDialog("Escolha novo tamanho", boardSizeView, View.OnClickListener {
+            // set a new value for the board size
+            boardSize = when (radioGroupSize.checkedRadioButtonId) {
+                R.id.rbEasy -> BoardSize.EASY
+                R.id.rbMed -> BoardSize.MEDIUM
+                else -> BoardSize.HARD
+            }
+            setupBoard()
+        })
     }
 
     private fun showAlertDialog(
