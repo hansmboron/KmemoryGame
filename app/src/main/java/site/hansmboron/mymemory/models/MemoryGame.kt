@@ -5,6 +5,7 @@ import site.hansmboron.mymemory.utils.DEFAULT_ICONS
 class MemoryGame(private val boardSize: BoardSize) {
     val cards: List<MemoryCard>
     private var indexOfSingleSelectedCard: Int? = null
+    private var numCardFlips = 0
 
     var numPairsFound = 0
 
@@ -17,6 +18,7 @@ class MemoryGame(private val boardSize: BoardSize) {
     fun flipCard(position: Int): Boolean {
         val card = cards[position]
         var foundMatch = false
+        numCardFlips++
 
         if (indexOfSingleSelectedCard == null) {
             // 0 or 2 cards previously flipped over
@@ -55,5 +57,9 @@ class MemoryGame(private val boardSize: BoardSize) {
 
     fun isCardFaceUp(position: Int): Boolean {
         return cards[position].isFaceUp
+    }
+
+    fun getNumMoves(): Int {
+        return numCardFlips / 2
     }
 }
