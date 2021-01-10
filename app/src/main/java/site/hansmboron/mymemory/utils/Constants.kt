@@ -2,6 +2,8 @@ package site.hansmboron.mymemory.utils
 
 import site.hansmboron.mymemory.R
 
+const val EXTRA_BOARD_SIZE = "EXTRA_BOARD_SIZE"
+
 val DEFAULT_ICONS = listOf(
     R.drawable.ic_bulb,
     R.drawable.ic_coffee,

@@ -1,6 +1,7 @@
 package site.hansmboron.mymemory
 
 import android.animation.ArgbEvaluator
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,11 +22,13 @@ import site.hansmboron.mymemory.models.BoardSize
 import site.hansmboron.mymemory.models.MemoryCard
 import site.hansmboron.mymemory.models.MemoryGame
 import site.hansmboron.mymemory.utils.DEFAULT_ICONS
+import site.hansmboron.mymemory.utils.EXTRA_BOARD_SIZE
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val CREATE_REQUEST_CODE = 248
     }
 
     private lateinit var rvBoard: RecyclerView
@@ -69,8 +72,29 @@ class MainActivity : AppCompatActivity() {
                 showNewSizeDialog()
                 return true
             }
+            R.id.mi_custom -> {
+                showCriationDialog()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showCriationDialog() {
+        val boardSizeView = LayoutInflater.from(this).inflate(R.layout.dialog_board_size, null)
+        val radioGroupSize = boardSizeView.findViewById<RadioGroup>(R.id.radioGroup)
+        showAlertDialog("Crie seu próprio jogo da memória", boardSizeView, View.OnClickListener {
+            // set a new value for the board size
+            val desiredBoardSize = when (radioGroupSize.checkedRadioButtonId) {
+                R.id.rbEasy -> BoardSize.EASY
+                R.id.rbMed -> BoardSize.MEDIUM
+                else -> BoardSize.HARD
+            }
+            // navigate the user to a new screen
+            val intent = Intent(this, CreateActivity::class.java)
+            intent.putExtra(EXTRA_BOARD_SIZE, desiredBoardSize)
+            startActivityForResult(intent, CREATE_REQUEST_CODE)
+        })
     }
 
     private fun showNewSizeDialog() {
