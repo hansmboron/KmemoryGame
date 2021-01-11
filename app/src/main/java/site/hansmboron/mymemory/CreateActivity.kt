@@ -1,24 +1,41 @@
 package site.hansmboron.mymemory
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import site.hansmboron.mymemory.models.BoardSize
 import site.hansmboron.mymemory.utils.EXTRA_BOARD_SIZE
 
 class CreateActivity : AppCompatActivity() {
 
     private lateinit var boardSize: BoardSize
+    private lateinit var rvImagePicker: RecyclerView
+    private lateinit var etGameName: EditText
+    private lateinit var btnSave: Button
     private var numImagesRequired = -1
+    private val choosenImageUris = mutableListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
 
+        rvImagePicker = findViewById(R.id.rvImagePicker)
+        etGameName = findViewById(R.id.et_game_name)
+        btnSave = findViewById(R.id.btn_save)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val boardSize = intent.getSerializableExtra(EXTRA_BOARD_SIZE) as BoardSize
+        boardSize = intent.getSerializableExtra(EXTRA_BOARD_SIZE) as BoardSize
         numImagesRequired = boardSize.getNumPairs()
         supportActionBar?.title = "Escolha imagens (0 / $numImagesRequired)"
+
+        rvImagePicker.adapter = ImagePickerAdapter(this, choosenImageUris, boardSize)
+        rvImagePicker.setHasFixedSize(true)
+        rvImagePicker.layoutManager = GridLayoutManager(this, boardSize.getWidth())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

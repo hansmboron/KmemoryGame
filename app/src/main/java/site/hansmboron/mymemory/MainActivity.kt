@@ -48,6 +48,12 @@ class MainActivity : AppCompatActivity() {
         clRoot = findViewById(R.id.clRoot)
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
+
+        // hack para navegar até a pagina diretamente
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra(EXTRA_BOARD_SIZE, BoardSize.MEDIUM)
+        startActivity(intent)
+
         setupBoard()
     }
 
